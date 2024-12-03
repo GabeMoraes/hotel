@@ -38,7 +38,7 @@ fn check_in() {
 
     io::stdin()
         .read_line(&mut name)
-        .expect("Failed to read line");
+        .expect("Failed to read line.");
 
     let name = name.trim();
 }
