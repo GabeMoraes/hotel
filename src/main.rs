@@ -1,4 +1,5 @@
 use std::io;
+use serde::{Deserialize, Serialize};
 
 struct Guest {
     name: String,
@@ -12,6 +13,7 @@ struct Guest {
     pay_method: PayMethod
 }
 
+#[derive(PartialEq, Eq)]
 enum Gender {
     Masc,
     Fem,
@@ -25,7 +27,7 @@ enum PayMethod {
 
 fn check_in() {
     let mut name = String::new();
-    let mut id: u32;
+    let mut id: u64;
     let mut birth_dt = String::new();
     let mut gender:Gender;
     let mut address_st = String::new();
@@ -41,6 +43,88 @@ fn check_in() {
         .expect("Failed to read line.");
 
     let name = name.trim();
+
+    println!("{}", name);
+
+    println!("Please input guest id:");
+
+    let mut input_line = String::new();
+    
+    io::stdin()
+        .read_line(&mut input_line)
+        .expect("Failed to read line.");
+
+    println!("{}", input_line);
+
+    id = input_line.trim().parse().expect("Input not int");
+
+    println!("{}", id);
+
+    println!("Please input guest birth:");
+    
+    io::stdin()
+        .read_line(&mut birth_dt)
+        .expect("Failed to read line.");
+
+    let birth_dt = birth_dt.trim();
+
+    println!("{}", birth_dt);
+
+    println!("Please input guest gender:");
+
+    let mut input_line = String::new();
+
+    io::stdin()
+        .read_line(&mut input_line)
+        .expect("Failed to read line.");
+
+    if input_line.trim() == "Masc" {
+        gender = Gender::Masc;
+    }
+    else {
+        gender = Gender::Fem;
+    }
+
+    if gender == Gender::Masc {
+        println!("Masc");
+    }
+    else if gender == Gender::Fem {
+        println!("Fem");
+    }
+
+    println!("Please input guest street:");
+
+    io::stdin()
+        .read_line(&mut address_st)
+        .expect("Failed to read line.");
+
+    let address_st = address_st.trim();
+
+    println!("{}", address_st);
+
+    println!("Please input guest address number:");
+
+    io::stdin()
+        .read_line(&mut address_n)
+        .expect("Failed to read line.");
+
+    let address_n = address_n.trim();
+
+    println!("{}", address_n);
+
+    println!("Please input guest postal code:");
+
+    let mut input_line = String::new();
+    
+    io::stdin()
+        .read_line(&mut input_line)
+        .expect("Failed to read line.");
+
+    println!("{}", input_line);
+
+    postal_code = input_line.trim().parse().expect("Input not int");
+
+    println!("{}", postal_code);
 }
 
 fn build_guest(
@@ -91,7 +175,7 @@ fn main() {
         }
 
         if input == "1\n" {
-
+            check_in();
         }
     }
 }
