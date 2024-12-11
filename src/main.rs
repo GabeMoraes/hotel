@@ -20,6 +20,7 @@ enum Gender {
     Nb
 }
 
+#[derive(PartialEq, Eq)]
 enum PayMethod {
     Credit,
     Cash
@@ -32,7 +33,7 @@ fn check_in() {
     let mut gender:Gender;
     let mut address_st = String::new();
     let mut address_n = String::new();
-    let mut postal_code: u16;
+    let mut postal_code: u32;
     let mut tel_number = String::new();
     let mut pay_method: PayMethod;
     
@@ -125,6 +126,38 @@ fn check_in() {
     postal_code = input_line.trim().parse().expect("Input not int");
 
     println!("{}", postal_code);
+
+    println!("Please input guest telephone number:");
+
+    io::stdin()
+        .read_line(&mut tel_number)
+        .expect("Failed to read line.");
+
+    let tel_number = tel_number.trim();
+
+    println!("{}", tel_number);
+
+    println!("Please input guest's payment method:");
+
+    let mut input_line = String::new();
+
+    io::stdin()
+        .read_line(&mut input_line)
+        .expect("Failed to read line.");
+
+    if input_line.trim() == "Credit" {
+        pay_method = PayMethod::Credit;
+    }
+    else {
+        pay_method = PayMethod::Cash;
+    }
+
+    if pay_method == PayMethod::Credit {
+        println!("Credit");
+    }
+    else if pay_method == PayMethod::Cash {
+        println!("Cash");
+    }
 }
 
 fn build_guest(
