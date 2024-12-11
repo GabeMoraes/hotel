@@ -1,26 +1,27 @@
 use std::io;
 use serde::{Deserialize, Serialize};
 
+#[derive(Debug)]
 struct Guest {
     name: String,
-    id: u32,
+    id: u64,
     birth_dt: String,
     gender: Gender,
     address_st: String,
     address_n: String,
-    postal_code: u16,
+    postal_code: u32,
     tel_number: String,
     pay_method: PayMethod
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Debug)]
 enum Gender {
     Masc,
     Fem,
     Nb
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Debug)]
 enum PayMethod {
     Credit,
     Cash
@@ -158,16 +159,30 @@ fn check_in() {
     else if pay_method == PayMethod::Cash {
         println!("Cash");
     }
+
+    let new_guest = build_guest(
+        name.to_string(),
+        id,
+        birth_dt.to_string(),
+        gender,
+        address_st.to_string(),
+        address_n.to_string(),
+        postal_code,
+        tel_number.to_string(),
+        pay_method
+    );
+
+    println!("{:?}", new_guest);
 }
 
 fn build_guest(
     name: String,
-    id: u32,
+    id: u64,
     birth_dt: String,
     gender: Gender,
     address_st: String,
     address_n: String,
-    postal_code: u16,
+    postal_code: u32,
     tel_number: String,
     pay_method: PayMethod
     ) -> Guest {
