@@ -27,6 +27,10 @@ enum PayMethod {
     Cash
 }
 
+fn input_msg(field: String) {
+    println!("Please input guest's {}", field);
+}
+
 fn check_in() {
     let mut name = String::new();
     let mut id: u64;
@@ -38,7 +42,7 @@ fn check_in() {
     let mut tel_number = String::new();
     let mut pay_method: PayMethod;
     
-    println!("Please input guest name:");
+    input_msg("name".to_string());
 
     io::stdin()
         .read_line(&mut name)
@@ -46,9 +50,7 @@ fn check_in() {
 
     let name = name.trim();
 
-    println!("{}", name);
-
-    println!("Please input guest id:");
+    input_msg("id".to_string());
 
     let mut input_line = String::new();
     
@@ -56,13 +58,9 @@ fn check_in() {
         .read_line(&mut input_line)
         .expect("Failed to read line.");
 
-    println!("{}", input_line);
-
     id = input_line.trim().parse().expect("Input not int");
 
-    println!("{}", id);
-
-    println!("Please input guest birth:");
+    input_msg("birth date".to_string());
     
     io::stdin()
         .read_line(&mut birth_dt)
@@ -70,9 +68,7 @@ fn check_in() {
 
     let birth_dt = birth_dt.trim();
 
-    println!("{}", birth_dt);
-
-    println!("Please input guest gender:");
+    input_msg("gender".to_string());
 
     let mut input_line = String::new();
 
@@ -83,18 +79,12 @@ fn check_in() {
     if input_line.trim() == "Masc" {
         gender = Gender::Masc;
     }
+
     else {
         gender = Gender::Fem;
     }
 
-    if gender == Gender::Masc {
-        println!("Masc");
-    }
-    else if gender == Gender::Fem {
-        println!("Fem");
-    }
-
-    println!("Please input guest street:");
+    input_msg("street name".to_string());
 
     io::stdin()
         .read_line(&mut address_st)
@@ -102,9 +92,7 @@ fn check_in() {
 
     let address_st = address_st.trim();
 
-    println!("{}", address_st);
-
-    println!("Please input guest address number:");
+    input_msg("address number".to_string());
 
     io::stdin()
         .read_line(&mut address_n)
@@ -112,9 +100,7 @@ fn check_in() {
 
     let address_n = address_n.trim();
 
-    println!("{}", address_n);
-
-    println!("Please input guest postal code:");
+    input_msg("postal code".to_string());
 
     let mut input_line = String::new();
     
@@ -122,13 +108,9 @@ fn check_in() {
         .read_line(&mut input_line)
         .expect("Failed to read line.");
 
-    println!("{}", input_line);
-
     postal_code = input_line.trim().parse().expect("Input not int");
 
-    println!("{}", postal_code);
-
-    println!("Please input guest telephone number:");
+    input_msg("telephone number".to_string());
 
     io::stdin()
         .read_line(&mut tel_number)
@@ -136,9 +118,7 @@ fn check_in() {
 
     let tel_number = tel_number.trim();
 
-    println!("{}", tel_number);
-
-    println!("Please input guest's payment method:");
+    input_msg("payment method".to_string());
 
     let mut input_line = String::new();
 
@@ -149,15 +129,9 @@ fn check_in() {
     if input_line.trim() == "Credit" {
         pay_method = PayMethod::Credit;
     }
+
     else {
         pay_method = PayMethod::Cash;
-    }
-
-    if pay_method == PayMethod::Credit {
-        println!("Credit");
-    }
-    else if pay_method == PayMethod::Cash {
-        println!("Cash");
     }
 
     let new_guest = build_guest(
@@ -169,8 +143,7 @@ fn check_in() {
         address_n.to_string(),
         postal_code,
         tel_number.to_string(),
-        pay_method
-    );
+        pay_method);
 
     println!("{:?}", new_guest);
 }
