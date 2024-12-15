@@ -1,7 +1,10 @@
 use std::io;
 use serde::{Deserialize, Serialize};
+use bincode;
+use std::fs::{self, File};
+use std::io::{Write, Read};
 
-#[derive(Debug)]
+#[derive(serde::Deserialize, serde::Serialize, Debug)]
 struct Guest {
     name: String,
     id: u64,
@@ -14,14 +17,14 @@ struct Guest {
     pay_method: PayMethod
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Debug, serde::Deserialize, serde:: Serialize)]
 enum Gender {
     Masc,
     Fem,
     Nb
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Debug, serde::Deserialize, serde:: Serialize)]
 enum PayMethod {
     Credit,
     Cash
@@ -146,6 +149,21 @@ fn check_in() {
         pay_method);
 
     println!("{:?}", new_guest);
+
+    let bin_data = bincode::serialize(&new_guest).unwrap();
+
+    let mut file = File::create(new_guest.id.to_string() + ".bin");
+    file.expect("REASON").write_all(&bin_data);
+    println!("Data saved to '{}.bin'.", new_guest.id);
+
+    // Lendo o arquivo binário.
+    let mut bin_data_from_file = Vec::new();
+    let mut file = File::open(new_guest.id.to_string() + ".bin");
+    file.expect("REASON").read_to_end(&mut bin_data_from_file);
+
+    // Desserialização: Recuperando a struct a partir dos dados binários.
+    let new_guest: Guest = bincode::deserialize(&bin_data_from_file).unwrap();
+    println!("Deserialized data: {:#?}", new_guest);
 }
 
 fn build_guest(
