@@ -167,27 +167,20 @@ fn check_in() {
 }
 
 fn build_guest(
-    name: String,
-    id: u64,
-    birth_dt: String,
-    gender: Gender,
-    address_st: String,
-    address_n: String,
-    postal_code: u32,
-    tel_number: String,
-    pay_method: PayMethod
-    ) -> Guest {
-        Guest {
-            name: name,
-            id: id,
-            birth_dt: birth_dt,
-            gender: gender,
-            address_st: address_st,
-            address_n: address_n,
-            postal_code: postal_code,
-            tel_number: tel_number,
-            pay_method: pay_method
-        }
+        name: String, id: u64, birth: String, gender: Gender,
+        address_st: String, address_n: String, postal_code: u32,
+        tel_number: String, pay_method: PayMethod) -> Guest {
+    Guest {
+        name,
+        id,
+        birth,
+        gender,
+        address_st,
+        address_n,
+        postal_code,
+        tel_number,
+        pay_method
+    }
 }
 
 fn show_menu() {
