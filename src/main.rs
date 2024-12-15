@@ -8,7 +8,7 @@ use std::io::{Write, Read};
 struct Guest {
     name: String,
     id: u64,
-    birth_dt: String,
+    birth: String,
     gender: Gender,
     address_st: String,
     address_n: String,
@@ -37,7 +37,7 @@ fn input_msg(field: String) {
 fn check_in() {
     let mut name = String::new();
     let mut id: u64;
-    let mut birth_dt = String::new();
+    let mut birth = String::new();
     let mut gender:Gender;
     let mut address_st = String::new();
     let mut address_n = String::new();
@@ -66,10 +66,10 @@ fn check_in() {
     input_msg("birth date".to_string());
     
     io::stdin()
-        .read_line(&mut birth_dt)
+        .read_line(&mut birth)
         .expect("Failed to read line.");
 
-    let birth_dt = birth_dt.trim();
+    let birth = birth.trim();
 
     input_msg("gender".to_string());
 
@@ -140,7 +140,7 @@ fn check_in() {
     let new_guest = build_guest(
         name.to_string(),
         id,
-        birth_dt.to_string(),
+        birth.to_string(),
         gender,
         address_st.to_string(),
         address_n.to_string(),
@@ -166,6 +166,28 @@ fn check_in() {
     println!("Deserialized data: {:#?}", new_guest);
 }
 
+fn check_out() {
+    input_msg("id".to_string());
+    
+    let mut id = String::new();
+    
+    io::stdin()
+        .read_line(&mut id)
+        .expect("Failed to read line.");
+
+    id = id.trim().to_string();
+
+    let path = format!("{}{}", id, ".bin");
+
+    println!("{}", path);
+
+    // Removendo o arquivo
+    match fs::remove_file(path) {
+        Ok(_) => println!("Guest w/ id {} checked out successully.", id),
+        Err(e) => eprintln!("Error trying to check out guest: {}", e),
+    }
+}
+
 fn build_guest(
         name: String, id: u64, birth: String, gender: Gender,
         address_st: String, address_n: String, postal_code: u32,
@@ -187,7 +209,9 @@ fn show_menu() {
     println!("Welcome to the check in/out controller.");
     println!("Please input an option:");
     println!("1 - Check in guest");
-    println!("2 - Exit");
+    println!("2 - Check out guest");
+    // println!("3 - Display guest");
+    println!("\n0 - Exit");
 }
 
 fn main() {
@@ -202,12 +226,16 @@ fn main() {
 
         println!("You have chosen: {}", input);
         
-        if input == "2\n" {
+        if input == "0\n" {
             break;
         }
 
         if input == "1\n" {
             check_in();
+        }
+
+        if input == "2\n" {
+            check_out();
         }
     }
 }
