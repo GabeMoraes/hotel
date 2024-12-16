@@ -188,6 +188,36 @@ fn check_out() {
     }
 }
 
+fn display_guest() {
+    input_msg("id".to_string());
+
+    let mut id = String::new();
+    
+    io::stdin()
+        .read_line(&mut id)
+        .expect("Failed to read line.");
+
+    id = id.trim().to_string();
+
+    let path = format!("{}{}", id, ".bin");
+
+    let mut bin_data_from_file = Vec::new();
+    let mut file = File::open(path);
+    file.expect("REASON").read_to_end(&mut bin_data_from_file);
+
+    let guest: Guest = bincode::deserialize(&bin_data_from_file).unwrap();
+    
+    println!("Name: {}", guest.name);
+    println!("ID: {}", guest.id);
+    println!("Birth: {}", guest.birth);
+    println!("Gender: {:?}", guest.gender);
+    println!("Street: {}", guest.address_st);
+    println!("Number: {}", guest.address_n);
+    println!("Postal code: {}", guest.postal_code);
+    println!("Telephone number: {}", guest.tel_number);
+    println!("Payment method: {:?}", guest.pay_method);
+}
+
 fn build_guest(
         name: String, id: u64, birth: String, gender: Gender,
         address_st: String, address_n: String, postal_code: u32,
@@ -210,7 +240,7 @@ fn show_menu() {
     println!("Please input an option:");
     println!("1 - Check in guest");
     println!("2 - Check out guest");
-    // println!("3 - Display guest");
+    println!("3 - Display guest");
     println!("\n0 - Exit");
 }
 
@@ -230,12 +260,16 @@ fn main() {
             break;
         }
 
-        if input == "1\n" {
+        else if input == "1\n" {
             check_in();
         }
 
-        if input == "2\n" {
+        else if input == "2\n" {
             check_out();
+        }
+
+        else if input == "3\n" {
+            display_guest();
         }
     }
 }
