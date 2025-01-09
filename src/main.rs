@@ -1,10 +1,12 @@
 use std::io;
-use serde::{Deserialize, Serialize};
-use bincode;
 use std::fs::{self, File};
 use std::io::{Write, Read};
 
-#[derive(serde::Deserialize, serde::Serialize, Debug)]
+use serde::{Serialize, Deserialize};
+use bincode;
+use chrono::{self, DateTime, Local};
+
+#[derive(Serialize, Deserialize, Debug)]
 struct Guest {
     name: String,
     id: u64,
@@ -14,17 +16,22 @@ struct Guest {
     address_n: String,
     postal_code: u32,
     tel_number: String,
-    pay_method: PayMethod
+    pay_method: PayMethod,
+    checkin_time: DateTime<Local>
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Deserialize, serde:: Serialize)]
+impl Guest {
+    const FIELD_COUNT: u8 = 9;
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 enum Gender {
     Masc,
     Fem,
     Nb
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Deserialize, serde:: Serialize)]
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 enum PayMethod {
     Credit,
     Cash
@@ -146,7 +153,9 @@ fn check_in() {
         address_n.to_string(),
         postal_code,
         tel_number.to_string(),
-        pay_method);
+        pay_method,
+        Local::now()
+    );
 
     println!("{:?}", new_guest);
 
@@ -402,7 +411,7 @@ fn update_guest() {
 fn build_guest(
         name: String, id: u64, birth: String, gender: Gender,
         address_st: String, address_n: String, postal_code: u32,
-        tel_number: String, pay_method: PayMethod) -> Guest {
+        tel_number: String, pay_method: PayMethod, checkin_time: DateTime<Local>) -> Guest {
     Guest {
         name,
         id,
@@ -412,7 +421,8 @@ fn build_guest(
         address_n,
         postal_code,
         tel_number,
-        pay_method
+        pay_method,
+        checkin_time
     }
 }
 
