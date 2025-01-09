@@ -24,9 +24,9 @@ impl Guest {
     const FIELD_COUNT: u8 = 9;
 
     const FIELDS: & [& str] = &[
-            "name", "id", "birth date", "gender",
+            "name", "id", "birth date", "gender (M/F/N)",
             "address", "address number", "postal code",
-            "telephone number", "payment method"
+            "telephone number", "payment method (Credit/Cash)"
             ];
 
     //
@@ -52,7 +52,7 @@ fn usr_input() -> String {
 
     while index < 9 {
         println!("Please input guest's {}.", Guest::FIELDS[index]);
-        
+
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line.");
@@ -63,127 +63,67 @@ fn usr_input() -> String {
     input
 }
 
+fn gd_selector(gender: String) -> Gender {
+    if gender == "M" || gender == "m" {
+        Gender::Masc
+    }
+
+    else if gender == "F" || gender == "f" {
+        Gender::Fem
+    }
+
+    else {
+        Gender::Nb
+    }
+}
+
+fn pm_selector(pay_method: String) -> PayMethod {
+    if pay_method == "Credit" || pay_method == "credit" {
+        PayMethod::Credit
+    }
+
+    else {
+        PayMethod::Cash
+    }
+}
+
 fn input_msg(field: String) {
     println!("Please input guest's {}", field);
 }
 
 fn check_in() {
-    let mut name = String::new();
-    let id: u64;
-    let mut birth = String::new();
-    let gender:Gender;
-    let mut address_st = String::new();
-    let mut address_n = String::new();
-    let postal_code: u32;
-    let mut tel_number = String::new();
-    let pay_method: PayMethod;
-    
-    input_msg("name".to_string());
+    let input = usr_input();
 
-    io::stdin()
-        .read_line(&mut name)
-        .expect("Failed to read line.");
+    let parts = input.split("\n");
+    let parts: Vec<&str> = parts.collect();
 
-    let name = name.trim();
-
-    input_msg("id".to_string());
-
-    let mut input_line = String::new();
-    
-    io::stdin()
-        .read_line(&mut input_line)
-        .expect("Failed to read line.");
-
-    id = input_line.trim().parse().expect("Input not int");
-
-    input_msg("birth date".to_string());
-    
-    io::stdin()
-        .read_line(&mut birth)
-        .expect("Failed to read line.");
-
-    let birth = birth.trim();
-
-    input_msg("gender".to_string());
-
-    let mut input_line = String::new();
-
-    io::stdin()
-        .read_line(&mut input_line)
-        .expect("Failed to read line.");
-
-    if input_line.trim() == "Masc" {
-        gender = Gender::Masc;
-    }
-
-    else {
-        gender = Gender::Fem;
-    }
-
-    input_msg("street name".to_string());
-
-    io::stdin()
-        .read_line(&mut address_st)
-        .expect("Failed to read line.");
-
-    let address_st = address_st.trim();
-
-    input_msg("address number".to_string());
-
-    io::stdin()
-        .read_line(&mut address_n)
-        .expect("Failed to read line.");
-
-    let address_n = address_n.trim();
-
-    input_msg("postal code".to_string());
-
-    let mut input_line = String::new();
-    
-    io::stdin()
-        .read_line(&mut input_line)
-        .expect("Failed to read line.");
-
-    postal_code = input_line.trim().parse().expect("Input not int");
-
-    input_msg("telephone number".to_string());
-
-    io::stdin()
-        .read_line(&mut tel_number)
-        .expect("Failed to read line.");
-
-    let tel_number = tel_number.trim();
-
-    input_msg("payment method".to_string());
-
-    let mut input_line = String::new();
-
-    io::stdin()
-        .read_line(&mut input_line)
-        .expect("Failed to read line.");
-
-    if input_line.trim() == "Credit" {
-        pay_method = PayMethod::Credit;
-    }
-
-    else {
-        pay_method = PayMethod::Cash;
-    }
+    let name = parts.get(0).unwrap().to_string();
+    let id = parts.get(1).unwrap().parse().expect("Failed to parse.");
+    let birth = parts.get(2).unwrap().to_string();
+    let gender = parts.get(3).unwrap().to_string();
+    let gender = gd_selector(gender);
+    let address_st = parts.get(4).unwrap().to_string();
+    let address_n = parts.get(5).unwrap().to_string();
+    let postal_code = parts.get(6)
+                                    .unwrap()
+                                    .parse()
+                                    .expect("Failed to parse.");
+    let tel_number = parts.get(7).unwrap().to_string();
+    let pay_method = parts.get(8).unwrap().to_string();
+    let pay_method = pm_selector(pay_method);
 
     let new_guest = build_guest(
-        name.to_string(),
+        name,
         id,
-        birth.to_string(),
+        birth,
         gender,
-        address_st.to_string(),
-        address_n.to_string(),
+        address_st,
+        address_n,
         postal_code,
-        tel_number.to_string(),
+        tel_number,
         pay_method,
         Local::now()
     );
-
-    println!("{:?}", new_guest);
 
     let bin_data = bincode::serialize(&new_guest).unwrap();
 
