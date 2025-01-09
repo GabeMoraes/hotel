@@ -20,9 +20,9 @@ struct Guest {
     checkin_time: DateTime<Local>
 }
 
-impl Guest {
-    const FIELD_COUNT: u8 = 9;
-}
+//impl Guest {
+//    const FIELD_COUNT: u8 = 9;
+//}
 
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 enum Gender {
@@ -43,14 +43,14 @@ fn input_msg(field: String) {
 
 fn check_in() {
     let mut name = String::new();
-    let mut id: u64;
+    let id: u64;
     let mut birth = String::new();
-    let mut gender:Gender;
+    let gender:Gender;
     let mut address_st = String::new();
     let mut address_n = String::new();
-    let mut postal_code: u32;
+    let postal_code: u32;
     let mut tel_number = String::new();
-    let mut pay_method: PayMethod;
+    let pay_method: PayMethod;
     
     input_msg("name".to_string());
 
@@ -161,14 +161,14 @@ fn check_in() {
 
     let bin_data = bincode::serialize(&new_guest).unwrap();
 
-    let mut file = File::create(new_guest.id.to_string() + ".bin");
-    file.expect("REASON").write_all(&bin_data);
+    let file = File::create(new_guest.id.to_string() + ".bin");
+    let _ = file.expect("REASON").write_all(&bin_data);
     println!("Data saved to '{}.bin'.", new_guest.id);
 
     // Lendo o arquivo binário.
     let mut bin_data_from_file = Vec::new();
-    let mut file = File::open(new_guest.id.to_string() + ".bin");
-    file.expect("REASON").read_to_end(&mut bin_data_from_file);
+    let file = File::open(new_guest.id.to_string() + ".bin");
+    let _ = file.expect("REASON").read_to_end(&mut bin_data_from_file);
 
     // Desserialização: Recuperando a struct a partir dos dados binários.
     let new_guest: Guest = bincode::deserialize(&bin_data_from_file).unwrap();
@@ -211,8 +211,8 @@ fn display_guest() {
     let path = format!("{}{}", id, ".bin");
 
     let mut bin_data_from_file = Vec::new();
-    let mut file = File::open(path);
-    file.expect("REASON").read_to_end(&mut bin_data_from_file);
+    let file = File::open(path);
+    let _ = file.expect("REASON").read_to_end(&mut bin_data_from_file);
 
     let guest: Guest = bincode::deserialize(&bin_data_from_file).unwrap();
     
@@ -244,8 +244,8 @@ fn update_guest() {
     let path = format!("{}{}", id, ".bin");
 
     let mut bin_data_from_file = Vec::new();
-    let mut file = File::open(path);
-    file.expect("REASON").read_to_end(&mut bin_data_from_file);
+    let file = File::open(path);
+    let _ = file.expect("REASON").read_to_end(&mut bin_data_from_file);
 
     let mut guest: Guest = bincode::deserialize(&bin_data_from_file).unwrap();
     
@@ -313,11 +313,11 @@ fn update_guest() {
         }
 
         else if input_line == "Fem" {
-            guest.gender == Gender::Fem;
+            let _ = guest.gender == Gender::Fem;
         }
 
         else {
-            guest.gender == Gender::Nb;
+            let _ = guest.gender == Gender::Nb;
         }
     }
 
@@ -373,7 +373,7 @@ fn update_guest() {
         }
 
         else if input_line == "Cash" {
-            guest.pay_method == PayMethod::Cash;
+            let _ = guest.pay_method == PayMethod::Cash;
         }
     }
 
@@ -386,8 +386,8 @@ fn update_guest() {
 
     let bin_data = bincode::serialize(&guest).unwrap();
 
-    let mut file = File::create(guest.id.to_string() + ".bin");
-    file.expect("REASON").write_all(&bin_data);
+    let file = File::create(guest.id.to_string() + ".bin");
+    let _ = file.expect("REASON").write_all(&bin_data);
     println!("Data saved to '{}.bin'.", guest.id);
 
     if delete_flag {
@@ -400,8 +400,8 @@ fn update_guest() {
 
     // Lendo o arquivo binário.
     let mut bin_data_from_file = Vec::new();
-    let mut file = File::open(guest.id.to_string() + ".bin");
-    file.expect("REASON").read_to_end(&mut bin_data_from_file);
+    let file = File::open(guest.id.to_string() + ".bin");
+    let _ = file.expect("REASON").read_to_end(&mut bin_data_from_file);
 
     // Desserialização: Recuperando a struct a partir dos dados binários.
     let guest: Guest = bincode::deserialize(&bin_data_from_file).unwrap();
