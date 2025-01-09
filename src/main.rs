@@ -20,9 +20,17 @@ struct Guest {
     checkin_time: DateTime<Local>
 }
 
-//impl Guest {
-//    const FIELD_COUNT: u8 = 9;
-//}
+impl Guest {
+    const FIELD_COUNT: u8 = 9;
+
+    const FIELDS: & [& str] = &[
+            "name", "id", "birth date", "gender",
+            "address", "address number", "postal code",
+            "telephone number", "payment method"
+            ];
+
+    //
+}
 
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 enum Gender {
@@ -35,6 +43,24 @@ enum Gender {
 enum PayMethod {
     Credit,
     Cash
+}
+
+fn usr_input() -> String {
+    let mut input = String::new();
+
+    let mut index = 0;
+
+    while index < 9 {
+        println!("Please input guest's {}.", Guest::FIELDS[index]);
+        
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to read line.");
+
+        index += 1;
+    }
+
+    input
 }
 
 fn input_msg(field: String) {
@@ -466,6 +492,11 @@ fn main() {
 
         else if input == "4\n" {
             update_guest();
+        }
+
+        else if input == "5\n" {
+            let user_input = usr_input();
+            println!("{}", user_input);
         }
     }
 }
